@@ -1,10 +1,19 @@
 from django.contrib.auth import get_user_model
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.hashers import check_password
+from rest_framework import status
+from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.tokens import RefreshToken
 
+from users.serializers import RegisterSerializer, MeUpdateSerializer
+from users.utils import get_tokens_for_user
 
 User = get_user_model()
+
+
 # Create your views here.
 def set_tokens_cookies(response, access_token: str, refresh_token: str | None = None):
     # access cookie
@@ -29,7 +38,107 @@ def set_tokens_cookies(response, access_token: str, refresh_token: str | None = 
 
     return response
 
-class RegisterViewAPI(APIView):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
 
+class RegisterViewAPI(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        user = serializer.save()
+
+        tokens = get_tokens_for_user(user)
+
+        resp = Response({
+            "user": {
+                "id": user.id,
+                "email": user.email,
+            },
+            "detail": "Registered successfully!",
+        },
+            status=status.HTTP_201_CREATED,
+        )
+
+        set_tokens_cookies(resp, tokens["access"], tokens["refresh"])
+        return resp
+
+
+class LoginViewAPI(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if not email or not password:
+            return Response({"detail": "Email or password is incorrect"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"detail": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        if not check_password(password, user.password):
+            return Response({"detail": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        tokens = get_tokens_for_user(user)
+
+        resp = Response({
+            "user": {
+                "id": user.id,
+                "email": user.email,
+            },
+            "detail": "Logged in successfully!",
+        },
+            status=status.HTTP_200_OK,
+        )
+
+        set_tokens_cookies(resp, tokens["access"], tokens["refresh"])
+        return resp
+
+
+class LogoutAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        resp = Response({"detail": "logged out"}, status=status.HTTP_200_OK)
+        resp.delete_cookie("access_token")
+        resp.delete_cookie("refresh_token")
+        return resp
+
+
+class RefreshView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        refresh_token = request.COOKIES.get("refresh_token")
+
+        if not refresh_token:
+            return Response(
+                {"detail": "No refresh token cookie."},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        try:
+            token_obj = RefreshToken(refresh_token)
+            new_access = str(token_obj.access_token)
+        except (TokenError, InvalidToken):
+            return Response(
+                {"detail": "Invalid refresh token."},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        resp = Response({"detail": "refreshed"}, status=status.HTTP_200_OK)
+        set_tokens_cookies(resp, new_access, refresh_token=None)
+        return resp
+
+
+class MeView(RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = MeUpdateSerializer
+
+    def get_object(self):
+        return self.request.user
