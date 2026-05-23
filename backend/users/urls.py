@@ -7,7 +7,7 @@ urlpatterns = [
     path("login/", LoginViewAPI.as_view(), name="login"),
     path('refresh/', RefreshView.as_view(), name='refresh'),
 
-    path('logout/', LogoutAPIgit .as_view(), name='logout'),
+    path('logout/', LogoutAPI .as_view(), name='logout'),
     path('me/', MeView.as_view(), name='me'),
 
 ]
