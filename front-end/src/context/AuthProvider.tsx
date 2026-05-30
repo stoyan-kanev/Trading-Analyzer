@@ -1,13 +1,11 @@
 import { useEffect, useState, type ReactNode } from "react";
 
 import { AuthContext, type User } from "./AuthContext";
-
 import { authService } from "../services/authService";
-import type {RegisterData} from "../types/interfaces.ts";
+import type { RegisterData } from "../types/interfaces";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
-
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -63,7 +61,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 user,
                 loading,
                 isAuthenticated: !!user,
-
                 login,
                 register,
                 logout,

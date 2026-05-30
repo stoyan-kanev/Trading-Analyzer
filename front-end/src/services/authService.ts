@@ -3,7 +3,7 @@ import { api } from "./api";
 
 export const authService = {
     register({ email, firstName, lastName, password }: RegisterData) {
-        return api.post('/users/register', {
+        return api.post('/users/register/', {
             email,
             first_name: firstName,
             last_name: lastName,
@@ -12,14 +12,14 @@ export const authService = {
     },
 
     login({ email, password }: LoginData) {
-        return api.post('/users/login', {
+        return api.post('/users/login/', {
             email,
             password,
         });
     },
-    logout: () => api.post("/users/logout"),
+    logout: () => api.post("/users/logout/"),
 
-    me: () => api.get("/users/me"),
+    me: () => api.get("/users/me/"),
 
-    refresh: () => api.post("/users/refresh"),
+    refresh: () => api.post("/users/refresh/"),
 }
