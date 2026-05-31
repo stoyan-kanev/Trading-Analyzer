@@ -1,0 +1,235 @@
+.home-page {
+    min-height: 100vh;
+    padding: 96px 24px 48px;
+
+    background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.08), transparent 35%),
+    var(--bg);
+
+    color: var(--text);
+}
+
+.home-page::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background-image: linear-gradient(
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+    ),
+    linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+    );
+
+    background-size: 40px 40px;
+
+    pointer-events: none;
+}
+
+.home-page::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='400'%3E%3Cpath d='M0 300 L150 250 L250 270 L350 180 L500 210 L650 130 L850 170 L1000 80 L1200 120' stroke='%233b82f6' stroke-opacity='0.15' fill='none' stroke-width='4'/%3E%3C/svg%3E");
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    pointer-events: none;
+}
+
+.hero-section,
+.features-section {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 48px;
+    align-items: center;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.hero-badge {
+    margin-bottom: 20px;
+    padding: 8px 14px;
+
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: 999px;
+
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--primary);
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.hero-content h1 {
+    max-width: 760px;
+
+    color: var(--text);
+    font-size: clamp(42px, 6vw, 72px);
+    line-height: 1.05;
+    letter-spacing: -2px;
+
+    margin-bottom: 24px;
+}
+
+.hero-content p {
+    max-width: 620px;
+
+    color: var(--text-secondary);
+    font-size: 18px;
+    line-height: 1.7;
+
+    margin-bottom: 32px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.primary-btn,
+.secondary-btn {
+    padding: 13px 20px;
+
+    border-radius: 10px;
+
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+.primary-btn {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+.primary-btn:hover {
+    background: var(--primary-hover);
+}
+
+.secondary-btn {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+}
+
+.secondary-btn:hover {
+    border-color: var(--primary);
+}
+
+.hero-card {
+    position: relative;
+
+    background: linear-gradient(
+            180deg,
+            rgba(24, 28, 37, 0.96),
+            rgba(24, 28, 37, 0.88)
+    );
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+
+    padding: 28px;
+
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 25px 60px rgba(0, 0, 0, 0.45);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 24px;
+}
+
+.trade-status {
+    color: var(--warning);
+}
+
+.score-box {
+    padding: 20px;
+    margin-bottom: 24px;
+
+    border-radius: 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.score-box strong {
+    color: var(--primary);
+    font-size: 24px;
+}
+
+.hero-card ul {
+    margin: 0;
+    padding-left: 20px;
+
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+.features-section {
+    max-width: 1180px;
+    margin: 72px auto 0;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    padding: 24px;
+
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 18px 40px rgba(0, 0, 0, 0.25);
+}
+
+.feature-card h3 {
+    color: var(--text);
+    margin-bottom: 10px;
+}
+
+.feature-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+    .hero-section {
+        grid-template-columns: 1fr;
+    }
+
+    .features-section {
+        grid-template-columns: 1fr;
+    }
+}
