@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     
 
     'users',
+    'analysis',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +66,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",  # Angular
+    "http://localhost:5173",  
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGIN_REGEXES = [
