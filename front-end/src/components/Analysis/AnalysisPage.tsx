@@ -36,6 +36,7 @@ const initialFormData: AnalysisFormData = {
 export function AnalysisPage() {
     const [formData, setFormData] = useState<AnalysisFormData>(initialFormData);
     const [result, setResult] = useState<AnalysisResult | null>(null);
+    const [isEvaluating, setIsEvaluating] = useState(false);
 
     function updateField(
         event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -111,21 +112,26 @@ export function AnalysisPage() {
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        const evaluationResult = evaluateSetup();
-        setResult(evaluationResult);
+        setIsEvaluating(true);
+        setResult(null);
+
+        setTimeout(() => {
+            const evaluationResult = evaluateSetup();
+
+            setResult(evaluationResult);
+            setIsEvaluating(false);
+        }, 700);
     }
 
     return (
         <main className="analysis-page">
             <section className="analysis-header">
-                <div>
-                    <p className="analysis-kicker">Setup Evaluation</p>
-                    <h1>New Analysis</h1>
-                    <p>Enter the trade context and let the analyzer score the setup.</p>
-                </div>
+                <p className="analysis-kicker">Setup Evaluation</p>
+                <h1>New Analysis</h1>
+                <p>Enter the trade context and let the analyzer score the setup.</p>
             </section>
 
-            <section className={`analysis-layout ${result ? "has-result" : ""}`}>
+            <section className={`analysis-layout ${result || isEvaluating ? "has-result" : ""}`}>
                 <form className="analysis-form" onSubmit={handleSubmit}>
                     <div className="form-grid">
                         <label>
@@ -227,13 +233,21 @@ export function AnalysisPage() {
                     </label>
 
                     <div className="form-actions">
-                        <button type="submit" className="analysis-primary-btn">
-                            Evaluate Setup
+                        <button type="submit" className="analysis-primary-btn" disabled={isEvaluating}>
+                            {isEvaluating ? "Evaluating..." : "Evaluate Setup"}
                         </button>
                     </div>
                 </form>
 
-                {result && (
+                {isEvaluating && (
+                    <aside className="analysis-result-card evaluating-card">
+                        <div className="loader-ring" />
+                        <h2>Analyzing setup...</h2>
+                        <p>Checking bias, liquidity, confirmation and risk-to-reward.</p>
+                    </aside>
+                )}
+
+                {result && !isEvaluating && (
                     <aside className="analysis-result-card">
                         <p className="result-kicker">Evaluation Result</p>
 
@@ -242,26 +256,45 @@ export function AnalysisPage() {
                             <strong>{result.score}/10</strong>
                         </div>
 
-                        <div className={`decision-badge decision-${result.decision.toLowerCase().replace(" ", "-")}`}>
+                        <div className="score-progress">
+                            <div
+                                className="score-progress-fill"
+                                style={{ width: `${result.score * 10}%` }}
+                            />
+                        </div>
+
+                        <div
+                            className={`decision-badge decision-${result.decision
+                                .toLowerCase()
+                                .replace(" ", "-")}`}
+                        >
                             {result.decision}
                         </div>
 
                         <div className="result-section">
                             <h3>Reasons</h3>
-                            <ul>
+
+                            <div className="result-items">
                                 {result.reasons.map((reason) => (
-                                    <li key={reason}>✓ {reason}</li>
+                                    <div className="result-item success" key={reason}>
+                                        <span>✓</span>
+                                        <p>{reason}</p>
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
 
                         <div className="result-section">
                             <h3>Warnings</h3>
-                            <ul>
+
+                            <div className="result-items">
                                 {result.warnings.map((warning) => (
-                                    <li key={warning}>⚠ {warning}</li>
+                                    <div className="result-item warning" key={warning}>
+                                        <span>!</span>
+                                        <p>{warning}</p>
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
                     </aside>
                 )}
