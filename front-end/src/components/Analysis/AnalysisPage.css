@@ -1,0 +1,93 @@
+.analysis-page {
+    padding: 120px 32px 48px;
+    min-height: 100vh;
+    background:
+            radial-gradient(circle at top right, rgba(34, 197, 94, 0.14), transparent 30%),
+            #0f1117;
+    color: #f8fafc;
+}
+.analysis-header {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.analysis-kicker {
+    color: #22c55e;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.analysis-header h1 {
+    margin: 0;
+    font-size: 42px;
+}
+
+.analysis-header p {
+    margin: 8px 0 0;
+    color: #94a3b8;
+}
+
+.analysis-form {
+    background: rgba(15, 23, 42, 0.86);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 20px;
+    padding: 24px;
+
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.analysis-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.analysis-form input,
+.analysis-form select,
+.analysis-form textarea {
+    width: 100%;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 12px;
+    padding: 13px 14px;
+    background: rgba(2, 6, 23, 0.75);
+    color: #f8fafc;
+    font: inherit;
+}
+
+.analysis-form textarea {
+    min-height: 140px;
+    resize: vertical;
+    margin-top: 20px;
+}
+
+.form-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.analysis-primary-btn {
+    border: none;
+    border-radius: 12px;
+    padding: 14px 22px;
+    background: #22c55e;
+    color: #04130a;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+@media (max-width: 800px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

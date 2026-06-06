@@ -3,7 +3,8 @@ import LoginPage from "../components/LoginPage/LoginPage.tsx";
 import RegisterPage from "../components/RegisterPage/RegisterPage.tsx";
 import AppLayout from "../App.tsx";
 import HomePage from "../components/Home/HomePage.tsx";
-import {DashboardPage} from "../pages/DashboardPage.tsx";
+import {DashboardPage} from "../components/Dashboard/DashboardPage.tsx";
+import {AnalysisPage} from "../components/Analysis/AnalysisPage.tsx";
 
 
 export const router = createBrowserRouter([
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
             {
                 path: "dashboard",
                 element: <DashboardPage/>
+            },
+            {
+                path: "analysis/new",
+                element: <AnalysisPage/>
             },
             {
                 path: "*",
