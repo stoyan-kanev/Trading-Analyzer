@@ -2,9 +2,9 @@ import { createContext } from "react";
 import type {RegisterData} from "../types/interfaces.ts";
 
 export type User = {
-    id: number;
     email: string;
-    username?: string;
+    first_name: string;
+    last_name: string;
 };
 
 

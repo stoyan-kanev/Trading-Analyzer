@@ -3,7 +3,6 @@ from .views import EvaluateSetupView, TradeAnalysisListCreateView, TradeAnalysis
 
 urlpatterns = [
     path("evaluate/", EvaluateSetupView.as_view(), name="evaluate-setup"),
-    path("", TradeAnalysisListCreateView.as_view(), name="create-analysis"),
-
+    path("", TradeAnalysisListCreateView.as_view(), name="analysis-list-create"),
     path("<int:pk>/", TradeAnalysisDetailView.as_view(), name="analysis-detail"),
 ]

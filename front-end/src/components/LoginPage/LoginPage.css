@@ -36,7 +36,19 @@
     opacity: .6;
 }
 
+.auth-error {
+    margin: 0 0 16px;
+    padding: 12px 14px;
 
+    border-radius: 8px;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+
+    background: rgba(239, 68, 68, 0.12);
+    color: #fca5a5;
+
+    font-size: 14px;
+    text-align: center;
+}
 
 .login-page::after {
     content: "";
@@ -59,7 +71,9 @@
     filter: blur(80px);
 }
 .login-form {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     z-index: 2;
 
     backdrop-filter: blur(12px);

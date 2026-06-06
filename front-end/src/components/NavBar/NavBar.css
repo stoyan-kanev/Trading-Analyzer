@@ -37,6 +37,18 @@
     align-items: center;
     gap: 24px;
 }
+.navbar-links button {
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    font-weight: 500;
+
+    transition: 0.2s ease;
+}
+
+.navbar-links button:hover {
+    color: var(--text);
+}
 
 .navbar-links a {
     color: var(--text-secondary);
