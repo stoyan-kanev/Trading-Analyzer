@@ -3,6 +3,7 @@ import LoginPage from "../components/LoginPage/LoginPage.tsx";
 import RegisterPage from "../components/RegisterPage/RegisterPage.tsx";
 import AppLayout from "../App.tsx";
 import HomePage from "../components/Home/HomePage.tsx";
+import {DashboardPage} from "../pages/DashboardPage.tsx";
 
 
 export const router = createBrowserRouter([
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
             {
                 path: "/register",
                 element: <RegisterPage />,
+            },
+            {
+                path: "dashboard",
+                element: <DashboardPage/>
             },
             {
                 path: "*",

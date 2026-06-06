@@ -22,9 +22,13 @@ export default function NavBar() {
 
                     {user && (
                         <>
+                            <Link to="/dashboard">
+                                Dashboard
+                            </Link>
                             <button onClick={logout}>
                                 Logout
                             </button>
+
                         </>
                     )}
                     {!user && (
