@@ -111,7 +111,10 @@
     color: #94a3b8;
     font-size: 14px;
 }
-
+.dashboard-btn{
+    display: flex;
+    gap: 16px;
+}
 @media (max-width: 900px) {
     .dashboard-header {
         flex-direction: column;

@@ -1,0 +1,135 @@
+.history-page {
+    min-height: 100vh;
+    padding: 120px 24px 48px;
+    background:
+            radial-gradient(circle at top right, rgba(34, 197, 94, 0.08), transparent 30%),
+            radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 35%),
+            #0b1120;
+    color: #f8fafc;
+}
+
+.history-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.history-kicker {
+    margin-bottom: 12px;
+    color: #22c55e;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+.history-header h1 {
+    margin: 0;
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.history-header p {
+    margin-top: 16px;
+    color: #94a3b8;
+    font-size: 18px;
+}
+
+.history-card {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px;
+    background: rgba(15, 23, 42, 0.92);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow:
+            0 10px 30px rgba(0,0,0,0.25),
+            0 0 0 1px rgba(255,255,255,0.02);
+}
+
+.history-card-header {
+    margin-bottom: 24px;
+}
+
+.history-card-header h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.history-card-header p {
+    margin-top: 8px;
+    color: #94a3b8;
+}
+
+.history-table-wrapper {
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-table th,
+.history-table td {
+    padding: 16px 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.history-table th {
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.history-table td {
+    color: #e2e8f0;
+}
+
+.history-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.history-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.history-decision {
+    display: inline-flex;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.history-action-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 9px 13px;
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.history-action-btn:hover {
+    background: rgba(34, 197, 94, 0.2);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .history-header h1 {
+        font-size: 42px;
+    }
+
+    .history-header p {
+        font-size: 16px;
+    }
+
+    .history-card {
+        padding: 20px;
+    }
+}

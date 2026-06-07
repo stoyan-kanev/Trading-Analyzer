@@ -17,13 +17,22 @@ export function DashboardPage() {
                     <h1>Dashboard</h1>
                     <p>Track your setup quality, decisions and trading performance.</p>
                 </div>
+                <div className="dashboard-btn">
+                    <button
+                        className="dashboard-primary-btn"
+                        onClick={() => navigate("/history")}
+                    >
+                        History
+                    </button>
+                    <button
+                        className="dashboard-primary-btn"
+                        onClick={() => navigate("/analysis/new")}
+                    >
+                        New Analysis
+                    </button>
+                </div>
 
-                <button
-                    className="dashboard-primary-btn"
-                    onClick={() => navigate("/analysis/new")}
-                >
-                    New Analysis
-                </button>
+
             </section>
 
             <StatsCards />
