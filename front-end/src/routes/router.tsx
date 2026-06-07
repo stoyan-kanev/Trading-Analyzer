@@ -8,6 +8,7 @@ import {AnalysisPage} from "../components/Analysis/AnalysisPage.tsx";
 import {AuthRoute} from "./authRoute.tsx";
 import {RouteGuard} from "./RouteGuard.tsx";
 import {HistoryPage} from "../components/History/HistoryPage.tsx";
+import {AnalysisDetailsPage} from "../components/AnalysisDetails/AnalysisDetailPage.tsx";
 
 
 export const router = createBrowserRouter([
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
                     {
                         path: "history",
                         element: <HistoryPage />,
+                    },
+                    {
+                        path: "/analysis/:id",
+                        element: <AnalysisDetailsPage />,
                     },
                 ],
             },

@@ -1,4 +1,5 @@
 import "./History.css"
+import {useNavigate} from "react-router-dom";
 const analyses = [
     {
         id: 1,
@@ -27,6 +28,9 @@ const analyses = [
 ];
 
 export function HistoryPage() {
+    const navigate = useNavigate();
+
+
     return (
         <main className="history-page">
             <section className="history-header">
@@ -73,7 +77,10 @@ export function HistoryPage() {
                                 <td>{analysis.session}</td>
                                 <td>{analysis.date}</td>
                                 <td>
-                                    <button className="history-action-btn">
+                                    <button
+                                        className="history-action-btn"
+                                        onClick={() => navigate(`/analysis/${analysis.id}`)}
+                                    >
                                         View
                                     </button>
                                 </td>
