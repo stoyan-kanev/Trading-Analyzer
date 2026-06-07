@@ -1,25 +1,8 @@
 import { useState } from "react";
 import "./AnalysisPage.css"
-type Decision = "TRADE" | "WAIT" | "NO TRADE";
+import type {AnalysisFormData, AnalysisResult, Decision} from "../../types/analysisTypes.ts";
 
-type AnalysisFormData = {
-    pair: string;
-    dailyBias: string;
-    h4Bias: string;
-    session: string;
-    zoneType: string;
-    confirmation: string;
-    liquiditySweep: string;
-    rr: string;
-    notes: string;
-};
 
-type AnalysisResult = {
-    score: number;
-    decision: Decision;
-    reasons: string[];
-    warnings: string[];
-};
 
 const initialFormData: AnalysisFormData = {
     pair: "",

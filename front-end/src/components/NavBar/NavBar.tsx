@@ -6,8 +6,15 @@ import {useAuth} from "../../context/useAuth.tsx";
 export default function NavBar() {
 
 
-    const { user, logout } = useAuth();
+    const { user, logout,loading } = useAuth();
 
+
+
+    if (loading) {
+        return (<>
+            </>
+        );
+    }
 
     return (
         <nav className="navbar">
@@ -19,6 +26,9 @@ export default function NavBar() {
                     TradePilot
                 </Link>
                 <div className="navbar-links">
+
+                    {loading }
+
 
                     {user && (
                         <>

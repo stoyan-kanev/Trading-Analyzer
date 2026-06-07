@@ -1,4 +1,4 @@
-import type {LoginData, RegisterData} from "../types/interfaces";
+import type {LoginData, RegisterData} from "../types/userTypes.ts";
 import { api } from "./api";
 
 export const authService = {
