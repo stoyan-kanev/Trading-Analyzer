@@ -5,6 +5,8 @@ import AppLayout from "../App.tsx";
 import HomePage from "../components/Home/HomePage.tsx";
 import {DashboardPage} from "../components/Dashboard/DashboardPage.tsx";
 import {AnalysisPage} from "../components/Analysis/AnalysisPage.tsx";
+import {AuthRoute} from "./authRoute.tsx";
+import {RouteGuard} from "./RouteGuard.tsx";
 
 
 export const router = createBrowserRouter([
@@ -16,20 +18,31 @@ export const router = createBrowserRouter([
                 element: <HomePage/>,
             },
             {
-                path: "/login",
-                element: <LoginPage />,
+                element: <RouteGuard/>,
+                children:[
+                    {
+                        path: "/login",
+                        element: <LoginPage />,
+                    },
+                    {
+                        path: "/register",
+                        element: <RegisterPage />,
+                    },
+                ]
             },
+
             {
-                path: "/register",
-                element: <RegisterPage />,
-            },
-            {
-                path: "dashboard",
-                element: <DashboardPage/>
-            },
-            {
-                path: "analysis/new",
-                element: <AnalysisPage/>
+                element: <AuthRoute />,
+                children: [
+                    {
+                        path: "dashboard",
+                        element: <DashboardPage />,
+                    },
+                    {
+                        path: "analysis/new",
+                        element: <AnalysisPage />,
+                    },
+                ],
             },
             {
                 path: "*",
