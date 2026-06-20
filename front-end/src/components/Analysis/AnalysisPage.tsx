@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./AnalysisPage.css"
-import type {AnalysisFormData, AnalysisResult, Decision} from "../../types/analysisTypes.ts";
-
+import type {AnalysisFormData, AnalysisResult} from "../../types/analysisTypes.ts";
+import {AnalysisService} from "../../services/analysisService.ts";
 
 
 const initialFormData: AnalysisFormData = {
@@ -21,6 +21,8 @@ export function AnalysisPage() {
     const [result, setResult] = useState<AnalysisResult | null>(null);
     const [isEvaluating, setIsEvaluating] = useState(false);
 
+
+
     function updateField(
         event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     ) {
@@ -32,78 +34,23 @@ export function AnalysisPage() {
         }));
     }
 
-    function evaluateSetup(): AnalysisResult {
-        let score = 0;
-        const reasons: string[] = [];
-        const warnings: string[] = [];
 
-        if (
-            formData.dailyBias === formData.h4Bias &&
-            formData.dailyBias !== "" &&
-            formData.dailyBias !== "neutral"
-        ) {
-            score += 2;
-            reasons.push("Daily and 4H bias are aligned.");
-        } else {
-            warnings.push("Daily and 4H bias are not aligned.");
-        }
 
-        if (formData.zoneType === "ob" || formData.zoneType === "fvg") {
-            score += 2;
-            reasons.push("Price is reacting from a valid zone.");
-        } else {
-            warnings.push("Zone type is weak or missing.");
-        }
-
-        if (formData.liquiditySweep === "true") {
-            score += 2;
-            reasons.push("Liquidity sweep detected.");
-        } else {
-            warnings.push("No liquidity sweep detected.");
-        }
-
-        if (formData.confirmation === "choch" || formData.confirmation === "bos") {
-            score += 3;
-            reasons.push("Lower timeframe confirmation detected.");
-        } else {
-            warnings.push("No strong confirmation detected.");
-        }
-
-        if (Number(formData.rr) >= 1.5) {
-            score += 1;
-            reasons.push("Risk-to-reward is acceptable.");
-        } else {
-            warnings.push("Risk-to-reward is weak.");
-        }
-
-        let decision: Decision = "NO TRADE";
-
-        if (score >= 7) {
-            decision = "TRADE";
-        } else if (score >= 4) {
-            decision = "WAIT";
-        }
-
-        return {
-            score,
-            decision,
-            reasons,
-            warnings,
-        };
-    }
-
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        setIsEvaluating(true);
-        setResult(null);
+        try {
+            setIsEvaluating(true);
+            setResult(null);
 
-        setTimeout(() => {
-            const evaluationResult = evaluateSetup();
+            const response = await AnalysisService.evaluateAnalysis(formData);
 
-            setResult(evaluationResult);
+            setResult(response.data);
+        } catch (error) {
+            console.error(error);
+        } finally {
             setIsEvaluating(false);
-        }, 700);
+        }
     }
 
     return (

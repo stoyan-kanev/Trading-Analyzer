@@ -14,4 +14,5 @@ class TradeAnalysisSerializer(serializers.ModelSerializer):
             "warnings",
             "created_at",
             "updated_at",
+            "analysis_time",
         ]

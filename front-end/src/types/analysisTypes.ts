@@ -1,4 +1,4 @@
-export type Decision = "TRADE" | "WAIT" | "NO TRADE";
+export type Decision = "trade" | "wait" | "no_trade";
 
 export type AnalysisFormData = {
     pair: string;

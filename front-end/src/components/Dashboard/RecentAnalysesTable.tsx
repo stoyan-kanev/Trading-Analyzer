@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 const analyses = [
     {
         pair: "GBP/JPY",
@@ -27,7 +29,7 @@ export function RecentAnalysesTable() {
         <section className="dashboard-card">
             <div className="section-header">
                 <h2>Recent Analyses</h2>
-                <button className="secondary-btn">View All</button>
+                <Link className="secondary-btn" to={"/history"}>View All</Link>
             </div>
 
             <table className="analyses-table">

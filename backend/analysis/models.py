@@ -1,4 +1,3 @@
-# analysis/models.py
 from django.conf import settings
 from django.db import models
 
@@ -37,21 +36,47 @@ class TradeAnalysis(models.Model):
     )
 
     pair = models.CharField(max_length=20)
-    analysis_time = models.DateTimeField()
 
-    daily_bias = models.CharField(max_length=20, choices=Bias.choices)
-    h4_bias = models.CharField(max_length=20, choices=Bias.choices)
+    analysis_time = models.DateTimeField(auto_now_add=True)
 
-    session = models.CharField(max_length=20, choices=Session.choices)
-    zone_type = models.CharField(max_length=30, choices=ZoneType.choices)
+    daily_bias = models.CharField(
+        max_length=20,
+        choices=Bias.choices
+    )
+
+    h4_bias = models.CharField(
+        max_length=20,
+        choices=Bias.choices
+    )
+
+    session = models.CharField(
+        max_length=20,
+        choices=Session.choices
+    )
+
+    zone_type = models.CharField(
+        max_length=30,
+        choices=ZoneType.choices
+    )
 
     has_liquidity_sweep = models.BooleanField(default=False)
-    confirmation = models.CharField(max_length=20, choices=Confirmation.choices)
 
-    rr = models.DecimalField(max_digits=4, decimal_places=2)
+    confirmation = models.CharField(
+        max_length=20,
+        choices=Confirmation.choices
+    )
+
+    rr = models.DecimalField(
+        max_digits=4,
+        decimal_places=2
+    )
 
     score = models.PositiveSmallIntegerField(default=0)
-    decision = models.CharField(max_length=20, choices=Decision.choices)
+
+    decision = models.CharField(
+        max_length=20,
+        choices=Decision.choices
+    )
 
     reasons = models.JSONField(default=list)
     warnings = models.JSONField(default=list)
@@ -60,3 +85,6 @@ class TradeAnalysis(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.pair} - {self.decision}"
