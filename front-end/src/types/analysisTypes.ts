@@ -19,8 +19,7 @@ export type AnalysisResult = {
     warnings: string[];
 };
 
-
-export type AnalysisResponse = {
+export type AnalysisResponse = AnalysisResult & {
     id: number;
     user: number;
     pair: string;
@@ -31,12 +30,8 @@ export type AnalysisResponse = {
     confirmation: string;
     has_liquidity_sweep: boolean;
     rr: string;
-    score: number;
-    decision: string;
-    reasons: string[];
-    warnings: string[];
     notes: string;
     analysis_time: string;
     created_at: string;
     updated_at: string;
-}
+};

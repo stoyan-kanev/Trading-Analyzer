@@ -1,82 +1,50 @@
 import { useNavigate, useParams } from "react-router-dom";
-import "./AnalysisPage.css"
-const mockAnalyses = [
-    {
-        id: "1",
-        pair: "GBP/JPY",
-        score: 8,
-        decision: "TRADE",
-        session: "London",
-        dailyBias: "Bullish",
-        h4Bias: "Bullish",
-        zoneType: "Order Block",
-        confirmation: "BOS",
-        rr: "2.4",
-        date: "2026-06-06",
-        notes: "Clean bullish continuation setup after liquidity sweep.",
-        reasons: [
-            "Daily and 4H bias are aligned.",
-            "Price is reacting from a valid zone.",
-            "Liquidity sweep detected.",
-            "Lower timeframe confirmation detected.",
-            "Risk-to-reward is acceptable.",
-        ],
-        warnings: [
-            "Wait for strong candle close before entry.",
-        ],
-    },
-    {
-        id: "2",
-        pair: "EUR/USD",
-        score: 5,
-        decision: "WAIT",
-        session: "New York",
-        dailyBias: "Bullish",
-        h4Bias: "Neutral",
-        zoneType: "FVG",
-        confirmation: "CHOCH",
-        rr: "1.8",
-        date: "2026-06-05",
-        notes: "Setup has potential, but higher timeframe bias is not clean.",
-        reasons: [
-            "Price is reacting from a valid zone.",
-            "Lower timeframe confirmation detected.",
-            "Risk-to-reward is acceptable.",
-        ],
-        warnings: [
-            "Daily and 4H bias are not aligned.",
-            "Wait for additional confirmation.",
-        ],
-    },
-    {
-        id: "3",
-        pair: "XAU/USD",
-        score: 3,
-        decision: "NO TRADE",
-        session: "London",
-        dailyBias: "Bearish",
-        h4Bias: "Bullish",
-        zoneType: "None",
-        confirmation: "None",
-        rr: "1.1",
-        date: "2026-06-04",
-        notes: "Conflicting bias and weak confirmation.",
-        reasons: [],
-        warnings: [
-            "Daily and 4H bias are not aligned.",
-            "Zone type is weak or missing.",
-            "No liquidity sweep detected.",
-            "No strong confirmation detected.",
-            "Risk-to-reward is weak.",
-        ],
-    },
-];
+import "./AnalysisPage.css";
+import { useEffect, useState } from "react";
+import { AnalysisService } from "../../services/analysisService.ts";
+import type {AnalysisResponse} from "../../types/analysisTypes.ts";
+
+const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString("en-EN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+};
+const formatSession = (session:string) => {
+    if (session == 'new_york'){
+        session = "New York";
+    }else if (session == 'asia'){
+        session = "Asia";
+    }else if (session == 'london'){
+        session = "London";
+    }
+
+    return session;
+}
 
 export function AnalysisDetailsPage() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const analysis = mockAnalyses.find((item) => item.id === id);
+    const [analysis, setAnalysis] = useState<AnalysisResponse | null>(null);
+
+    useEffect(() => {
+        const getAnalysis = async () => {
+            try {
+                if (!id) return;
+
+                const result = await AnalysisService.getAnalysisById(id);
+                setAnalysis(result.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getAnalysis();
+    }, [id]);
 
     if (!analysis) {
         return (
@@ -105,7 +73,9 @@ export function AnalysisDetailsPage() {
                 <div className="details-title-row">
                     <div>
                         <h1>{analysis.pair}</h1>
-                        <p>{analysis.date} • {analysis.session} Session</p>
+                        <p>
+                            {formatDate(analysis.created_at)} • {formatSession(analysis.session)} Session
+                        </p>
                     </div>
 
                     <span
@@ -113,7 +83,7 @@ export function AnalysisDetailsPage() {
                             .toLowerCase()
                             .replace(" ", "-")}`}
                     >
-                        {analysis.decision}
+                        {analysis.decision.toUpperCase()}
                     </span>
                 </div>
             </section>
@@ -135,22 +105,22 @@ export function AnalysisDetailsPage() {
                     <div className="details-grid">
                         <div className="details-info-item">
                             <span>Daily Bias</span>
-                            <strong>{analysis.dailyBias}</strong>
+                            <strong>{analysis.daily_bias.toUpperCase()}</strong>
                         </div>
 
                         <div className="details-info-item">
                             <span>4H Bias</span>
-                            <strong>{analysis.h4Bias}</strong>
+                            <strong>{analysis.h4_bias.toUpperCase()}</strong>
                         </div>
 
                         <div className="details-info-item">
                             <span>Zone Type</span>
-                            <strong>{analysis.zoneType}</strong>
+                            <strong>{analysis.zone_type.toUpperCase()}</strong>
                         </div>
 
                         <div className="details-info-item">
                             <span>Confirmation</span>
-                            <strong>{analysis.confirmation}</strong>
+                            <strong>{analysis.confirmation.toUpperCase()}</strong>
                         </div>
 
                         <div className="details-info-item">
@@ -160,13 +130,13 @@ export function AnalysisDetailsPage() {
 
                         <div className="details-info-item">
                             <span>Session</span>
-                            <strong>{analysis.session}</strong>
+                            <strong>{formatSession(analysis.session)}</strong>
                         </div>
                     </div>
 
                     <div className="details-section">
                         <h2>Notes</h2>
-                        <p>{analysis.notes}</p>
+                        <p>{analysis.notes || "No notes added."}</p>
                     </div>
                 </div>
 
@@ -192,12 +162,16 @@ export function AnalysisDetailsPage() {
                         <h2>Warnings</h2>
 
                         <div className="details-items">
-                            {analysis.warnings.map((warning) => (
-                                <div className="details-item warning" key={warning}>
-                                    <span>!</span>
-                                    <p>{warning}</p>
-                                </div>
-                            ))}
+                            {analysis.warnings.length > 0 ? (
+                                analysis.warnings.map((warning) => (
+                                    <div className="details-item warning" key={warning}>
+                                        <span>!</span>
+                                        <p>{warning}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="muted-text">No warnings detected.</p>
+                            )}
                         </div>
                     </div>
                 </aside>

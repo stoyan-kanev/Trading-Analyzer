@@ -40,7 +40,17 @@ const formatDate = (dateString: string) => {
         minute: "2-digit",
     });
 };
+const formatSession = (session:string) => {
+    if (session == 'new_york'){
+        session = "New York";
+    }else if (session == 'asia'){
+        session = "Asia";
+    }else if (session == 'london'){
+        session = "London";
+    }
 
+    return session;
+}
 
 export function HistoryPage() {
     const navigate = useNavigate();
@@ -51,6 +61,7 @@ export function HistoryPage() {
         const getAnalyses = async () => {
             try {
                 const result = await AnalysisService.getAnalysis();
+
                 setAnalyses(result.data.results);
             } catch (error) {
                 console.error(error);
@@ -103,10 +114,10 @@ export function HistoryPage() {
                                             .toLowerCase()
                                             .replace(" ", "-")}`}
                                     >
-                                        {analysis.decision}
+                                        {analysis.decision.toUpperCase()}
                                     </span>
                                 </td>
-                                <td>{analysis.session}</td>
+                                <td>{formatSession(analysis.session)}</td>
                                 <td>{formatDate(analysis.created_at)}</td>
                                 <td>
                                     <button
