@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./AnalysisPage.css"
 import type {AnalysisFormData, AnalysisResult} from "../../types/analysisTypes.ts";
 import {AnalysisService} from "../../services/analysisService.ts";
+import {useNavigate} from "react-router-dom";
 
 
 const initialFormData: AnalysisFormData = {
@@ -20,8 +21,8 @@ export function AnalysisPage() {
     const [formData, setFormData] = useState<AnalysisFormData>(initialFormData);
     const [result, setResult] = useState<AnalysisResult | null>(null);
     const [isEvaluating, setIsEvaluating] = useState(false);
-
-
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const navigate = useNavigate();
 
     function updateField(
         event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -40,6 +41,7 @@ export function AnalysisPage() {
         event.preventDefault();
 
         try {
+            setErrorMessage('')
             setIsEvaluating(true);
             setResult(null);
 
@@ -47,8 +49,25 @@ export function AnalysisPage() {
 
             setResult(response.data);
         } catch (error) {
+            setErrorMessage('Fill the form and try again!')
             console.error(error);
         } finally {
+            setIsEvaluating(false);
+        }
+    }
+    async function saveEval(){
+        try{
+            setErrorMessage("");
+            setIsEvaluating(false);
+            setResult(null);
+            const response = await AnalysisService.saveAnalysis(formData);
+            setResult(response.data);
+            navigate("/dashboard");
+        }catch(error){
+            setErrorMessage('Error saving Eval');
+            console.log(error);
+
+        }finally{
             setIsEvaluating(false);
         }
     }
@@ -63,6 +82,8 @@ export function AnalysisPage() {
 
             <section className={`analysis-layout ${result || isEvaluating ? "has-result" : ""}`}>
                 <form className="analysis-form" onSubmit={handleSubmit}>
+                    {errorMessage && <h2 className='error-msg'>{errorMessage}</h2>}
+
                     <div className="form-grid">
                         <label>
                             Pair
@@ -179,7 +200,10 @@ export function AnalysisPage() {
 
                 {result && !isEvaluating && (
                     <aside className="analysis-result-card">
-                        <p className="result-kicker">Evaluation Result</p>
+                        <div className='evaluating-title-wrapper'>
+                            <p className="result-kicker">Evaluation Result</p>
+                            <button onClick={saveEval} className='analysis-primary-btn'>Save Eval</button>
+                        </div>
 
                         <div className="result-score-row">
                             <span>Score</span>
