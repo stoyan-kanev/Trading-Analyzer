@@ -1,34 +1,66 @@
 import "./History.css"
 import {useNavigate} from "react-router-dom";
-const analyses = [
-    {
-        id: 1,
-        pair: "GBP/JPY",
-        score: 8,
-        decision: "TRADE",
-        session: "London",
-        date: "2026-06-06",
-    },
-    {
-        id: 2,
-        pair: "EUR/USD",
-        score: 5,
-        decision: "WAIT",
-        session: "New York",
-        date: "2026-06-05",
-    },
-    {
-        id: 3,
-        pair: "XAU/USD",
-        score: 3,
-        decision: "NO TRADE",
-        session: "London",
-        date: "2026-06-04",
-    },
-];
+import {useEffect, useState} from "react";
+import {AnalysisService} from "../../services/analysisService.ts";
+import type {AnalysisResponse} from "../../types/analysisTypes.ts";
+// const analyses = [
+//     {
+//         id: 1,
+//         pair: "GBP/JPY",
+//         score: 8,
+//         decision: "TRADE",
+//         session: "London",
+//         date: "2026-06-06",
+//     },
+//     {
+//         id: 2,
+//         pair: "EUR/USD",
+//         score: 5,
+//         decision: "WAIT",
+//         session: "New York",
+//         date: "2026-06-05",
+//     },
+//     {
+//         id: 3,
+//         pair: "XAU/USD",
+//         score: 3,
+//         decision: "NO TRADE",
+//         session: "London",
+//         date: "2026-06-04",
+//     },
+// ];
+
+
+const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString("en-EN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+};
+
 
 export function HistoryPage() {
     const navigate = useNavigate();
+
+    const [analyses, setAnalyses] = useState<AnalysisResponse[]>([]);
+
+    useEffect(() => {
+        const getAnalyses = async () => {
+            try {
+                const result = await AnalysisService.getAnalysis();
+                setAnalyses(result.data.results);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getAnalyses();
+    }, []);
+
+
 
 
     return (
@@ -75,7 +107,7 @@ export function HistoryPage() {
                                     </span>
                                 </td>
                                 <td>{analysis.session}</td>
-                                <td>{analysis.date}</td>
+                                <td>{formatDate(analysis.created_at)}</td>
                                 <td>
                                     <button
                                         className="history-action-btn"

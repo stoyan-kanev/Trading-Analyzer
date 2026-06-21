@@ -18,3 +18,25 @@ export type AnalysisResult = {
     reasons: string[];
     warnings: string[];
 };
+
+
+export type AnalysisResponse = {
+    id: number;
+    user: number;
+    pair: string;
+    session: string;
+    daily_bias: string;
+    h4_bias: string;
+    zone_type: string;
+    confirmation: string;
+    has_liquidity_sweep: boolean;
+    rr: string;
+    score: number;
+    decision: string;
+    reasons: string[];
+    warnings: string[];
+    notes: string;
+    analysis_time: string;
+    created_at: string;
+    updated_at: string;
+}
