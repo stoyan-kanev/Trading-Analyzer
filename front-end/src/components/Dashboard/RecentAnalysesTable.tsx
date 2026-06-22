@@ -1,30 +1,49 @@
 import {Link} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {AnalysisService} from "../../services/analysisService.ts";
+import type {AnalysisResponse} from "../../types/analysisTypes.ts";
+import {formatDate} from "../../helpers/formatDate.tsx";
+import {formatSession} from "../../helpers/formatSession.tsx";
 
-const analyses = [
-    {
-        pair: "GBP/JPY",
-        score: 8,
-        decision: "TRADE",
-        session: "London",
-        date: "2026-06-06",
-    },
-    {
-        pair: "EUR/USD",
-        score: 5,
-        decision: "WAIT",
-        session: "New York",
-        date: "2026-06-05",
-    },
-    {
-        pair: "XAU/USD",
-        score: 3,
-        decision: "NO TRADE",
-        session: "London",
-        date: "2026-06-04",
-    },
-];
 
 export function RecentAnalysesTable() {
+    const [analyses, setAnalyses] = useState<AnalysisResponse[]>([])
+    const [recentAnalyses, setRecentAnalyses] = useState<AnalysisResponse[]>([])
+
+    useEffect(() => {
+
+        const fetchAnalysis = async() => {
+            try{
+                const result = await AnalysisService.getAnalysis()
+                setAnalyses(result.data.results);
+
+                // TODO:
+                // Dashboard should eventually use dedicated endpoints:
+                // - /dashboard/stats
+                // - /dashboard/recent
+                //
+                // Currently we load all analyses and derive the statistics on the client.
+                // This is acceptable for MVP but should be moved to the backend
+                // as the dataset grows.
+
+                setRecentAnalyses(result.data.results.slice(0,5));
+                console.log(result.data.results)
+            }catch (err){
+                console.log(err)
+            }
+
+        }
+
+
+
+        fetchAnalysis();
+
+
+
+
+    }, []);
+
+
     return (
         <section className="dashboard-card">
             <div className="section-header">
@@ -44,13 +63,13 @@ export function RecentAnalysesTable() {
                 </thead>
 
                 <tbody>
-                {analyses.map((analysis) => (
-                    <tr key={`${analysis.pair}-${analysis.date}`}>
+                {recentAnalyses.map((analysis) => (
+                    <tr key={`${analysis.pair}-${analysis.created_at}`}>
                         <td>{analysis.pair}</td>
                         <td>{analysis.score}/10</td>
-                        <td>{analysis.decision}</td>
-                        <td>{analysis.session}</td>
-                        <td>{analysis.date}</td>
+                        <td>{analysis.decision.toUpperCase()}</td>
+                        <td>{formatSession(analysis.session)}</td>
+                        <td>{formatDate(analysis.created_at)}</td>
                     </tr>
                 ))}
                 </tbody>

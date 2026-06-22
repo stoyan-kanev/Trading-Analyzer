@@ -3,27 +3,10 @@ import "./AnalysisPage.css";
 import { useEffect, useState } from "react";
 import { AnalysisService } from "../../services/analysisService.ts";
 import type {AnalysisResponse} from "../../types/analysisTypes.ts";
+import {formatDate} from "../../helpers/formatDate.tsx";
+import {formatSession} from "../../helpers/formatSession.tsx";
 
-const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString("en-EN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-    });
-};
-const formatSession = (session:string) => {
-    if (session == 'new_york'){
-        session = "New York";
-    }else if (session == 'asia'){
-        session = "Asia";
-    }else if (session == 'london'){
-        session = "London";
-    }
 
-    return session;
-}
 
 export function AnalysisDetailsPage() {
     const { id } = useParams();
@@ -84,7 +67,7 @@ export function AnalysisDetailsPage() {
                             .replace(" ", "-")}`}
                     >
                         {analysis.decision.toUpperCase()}
-                    </span>
+                    </span> f
                 </div>
             </section>
 

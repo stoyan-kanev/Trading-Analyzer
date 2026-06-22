@@ -3,54 +3,8 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {AnalysisService} from "../../services/analysisService.ts";
 import type {AnalysisResponse} from "../../types/analysisTypes.ts";
-// const analyses = [
-//     {
-//         id: 1,
-//         pair: "GBP/JPY",
-//         score: 8,
-//         decision: "TRADE",
-//         session: "London",
-//         date: "2026-06-06",
-//     },
-//     {
-//         id: 2,
-//         pair: "EUR/USD",
-//         score: 5,
-//         decision: "WAIT",
-//         session: "New York",
-//         date: "2026-06-05",
-//     },
-//     {
-//         id: 3,
-//         pair: "XAU/USD",
-//         score: 3,
-//         decision: "NO TRADE",
-//         session: "London",
-//         date: "2026-06-04",
-//     },
-// ];
-
-
-const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString("en-EN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-    });
-};
-const formatSession = (session:string) => {
-    if (session == 'new_york'){
-        session = "New York";
-    }else if (session == 'asia'){
-        session = "Asia";
-    }else if (session == 'london'){
-        session = "London";
-    }
-
-    return session;
-}
+import {formatSession} from "../../helpers/formatSession.tsx";
+import {formatDate} from "../../helpers/formatDate.tsx";
 
 export function HistoryPage() {
     const navigate = useNavigate();
