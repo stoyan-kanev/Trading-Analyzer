@@ -16,3 +16,5 @@ class TradeAnalysisSerializer(serializers.ModelSerializer):
             "updated_at",
             "analysis_time",
         ]
+
+

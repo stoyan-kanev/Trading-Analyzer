@@ -67,7 +67,7 @@ export function AnalysisDetailsPage() {
                             .replace(" ", "-")}`}
                     >
                         {analysis.decision.toUpperCase()}
-                    </span> f
+                    </span>
                 </div>
             </section>
 

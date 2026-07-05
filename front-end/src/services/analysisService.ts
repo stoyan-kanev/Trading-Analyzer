@@ -48,5 +48,8 @@ export const AnalysisService = {
     getAnalysisById(id: string) {
         return api.get(`/api/analysis/${id}/`);
     },
+    getAnalysisStats(){
+        return api.get('/api/analysis/get-stats');
+    }
 
 }

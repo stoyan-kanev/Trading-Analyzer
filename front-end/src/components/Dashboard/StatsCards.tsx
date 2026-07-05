@@ -1,19 +1,37 @@
-const stats = [
-    { label: "Total Analyses", value: "24" },
-    { label: "Trade Decisions", value: "9" },
-    { label: "Winrate", value: "62%" },
-    { label: "Average RR", value: "2.1R" },
-];
+import type { DashboardStats } from "../../types/analysisTypes.ts";
 
-export function StatsCards() {
+type StatsCardsProps = {
+    stats?: DashboardStats;
+};
+
+export function StatsCards({ stats }: StatsCardsProps) {
+    const cards = [
+        {
+            label: "Total Analyses",
+            value: stats?.total_analyses ?? 0,
+        },
+        {
+            label: "Trade Decisions",
+            value: stats?.trade_decisions ?? 0,
+        },
+        {
+            label: "Trade Rate",
+            value: `${stats?.trade_decision_rate ?? 0}%`,
+        },
+        {
+            label: "Average RR",
+            value: `${stats?.avg_rr ?? 0}R`,
+        },
+    ];
+
     return (
         <section className="stats-grid">
-            {stats.map((stat) => (
-                    <div className="dashboard-card stat-card" key={stat.label}>
+            {cards.map((stat) => (
+                <div className="dashboard-card stat-card" key={stat.label}>
                     <span>{stat.label}</span>
                     <strong>{stat.value}</strong>
-                    </div>
-    ))}
-    </section>
-);
+                </div>
+            ))}
+        </section>
+    );
 }
