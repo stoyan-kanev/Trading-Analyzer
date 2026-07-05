@@ -25,8 +25,22 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-}
 
+    opacity: 0;
+    transform: translateY(8px);
+    animation: fadeInUp 400ms ease-out forwards;
+}
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 .breakdown-row {
     display: flex;
     align-items: center;
@@ -37,7 +51,7 @@
 }
 
 .breakdown-row span {
-    color: var(--muted);
+    color: var(--text);
 }
 
 .breakdown-row strong {
@@ -64,6 +78,18 @@
             rgba(80, 120, 255, 0.9),
             rgba(76, 201, 240, 0.9)
     );
+
+    transform-origin: left;
+    animation: fillBar 700ms ease-out forwards;
+}
+@keyframes fillBar {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
 }
 .dashboard-kicker {
     color: #818cf8;
