@@ -8,6 +8,12 @@
     color: #f8fafc;
 }
 
+.analysis-decision-and-btn {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
 .details-header {
     max-width: 1100px;
     margin: 0 auto 32px;
@@ -134,7 +140,8 @@
     }
 }
 
-.details-grid {
+.details-grid,
+.trade-details-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
@@ -157,6 +164,7 @@
 .details-info-item strong {
     color: #f8fafc;
     font-size: 16px;
+    word-break: break-word;
 }
 
 .details-section {
@@ -266,6 +274,41 @@
     cursor: pointer;
 }
 
+/* Linked trade */
+
+.trade-journal-section {
+    padding-top: 26px;
+    border-top: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.trade-journal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.trade-journal-header h2 {
+    margin: 0;
+}
+
+.trade-result-win {
+    color: #4ade80 !important;
+}
+
+.trade-result-loss {
+    color: #f87171 !important;
+}
+
+.trade-result-breakeven {
+    color: #facc15 !important;
+}
+
+.trade-notes-item {
+    grid-column: 1 / -1;
+}
+
 @media (max-width: 1000px) {
     .details-layout {
         grid-template-columns: 1fr;
@@ -274,6 +317,10 @@
     .details-title-row {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .analysis-decision-and-btn {
+        flex-wrap: wrap;
     }
 }
 
@@ -286,12 +333,18 @@
         font-size: 16px;
     }
 
-    .details-grid {
+    .details-grid,
+    .trade-details-grid {
         grid-template-columns: 1fr;
     }
 
     .details-main-card,
     .details-side-card {
         padding: 22px;
+    }
+
+    .trade-journal-header {
+        align-items: flex-start;
+        flex-direction: column;
     }
 }

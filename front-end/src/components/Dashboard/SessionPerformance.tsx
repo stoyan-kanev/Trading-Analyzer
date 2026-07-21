@@ -10,7 +10,7 @@ export function SessionPerformance({ data }: SessionPerformanceProps) {
 
     return (
         <div className="dashboard-card">
-            <h2>Session Performance</h2>
+            <h2>Session Breakdown</h2>
 
             {data.length === 0 || total === 0 ? (
                 <p className="muted">No session data yet.</p>

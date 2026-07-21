@@ -1,0 +1,95 @@
+.trade-log-page {
+    min-height: 100vh;
+    padding: 120px 24px 48px;
+    background:
+            radial-gradient(circle at top right, rgba(34, 197, 94, 0.08), transparent 30%),
+            radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 35%),
+            #0b1120;
+}
+
+.trade-log-card {
+    width: min(900px, 100%);
+    margin: 0 auto;
+    padding: 28px;
+
+    border: 1px solid var(--border);
+    border-radius: 20px;
+
+    background: rgba(15, 17, 23, 0.86);
+    backdrop-filter: blur(14px);
+}
+
+.trade-log-header {
+    margin-bottom: 24px;
+}
+
+.trade-log-header h1 {
+    margin: 6px 0;
+}
+
+.trade-log-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.trade-log-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    font-size: 14px;
+    color: var(--text);
+}
+
+.trade-log-form input,
+.trade-log-form select,
+.trade-log-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.04);
+    outline: none;
+}
+
+.trade-log-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.trade-log-form input:focus,
+.trade-log-form select:focus,
+.trade-log-form textarea:focus {
+    border-color: rgba(76, 201, 240, 0.8);
+}
+
+.trade-log-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.trade-log-error {
+    margin-bottom: 16px;
+    color: #ff6b6b;
+}
+
+@media (max-width: 720px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .trade-log-actions {
+        flex-direction: column;
+    }
+}

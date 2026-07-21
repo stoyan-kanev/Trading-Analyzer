@@ -3,13 +3,13 @@ import LoginPage from "../components/LoginPage/LoginPage.tsx";
 import RegisterPage from "../components/RegisterPage/RegisterPage.tsx";
 import AppLayout from "../App.tsx";
 import HomePage from "../components/Home/HomePage.tsx";
-import {DashboardPage} from "../components/Dashboard/DashboardPage.tsx";
-import {AnalysisPage} from "../components/Analysis/AnalysisPage.tsx";
-import {AuthRoute} from "./authRoute.tsx";
-import {RouteGuard} from "./RouteGuard.tsx";
-import {HistoryPage} from "../components/History/HistoryPage.tsx";
-import {AnalysisDetailsPage} from "../components/AnalysisDetails/AnalysisDetailPage.tsx";
-
+import { DashboardPage } from "../components/Dashboard/DashboardPage.tsx";
+import { AnalysisPage } from "../components/Analysis/AnalysisPage.tsx";
+import { AuthRoute } from "./authRoute.tsx";
+import { RouteGuard } from "./RouteGuard.tsx";
+import { HistoryPage } from "../components/History/HistoryPage.tsx";
+import { AnalysisDetailsPage } from "../components/AnalysisDetails/AnalysisDetailPage.tsx";
+import {TradeLogPage} from "../components/TradeLogPage/TradeLogPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -17,11 +17,11 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <HomePage/>,
+                element: <HomePage />,
             },
             {
-                element: <RouteGuard/>,
-                children:[
+                element: <RouteGuard />,
+                children: [
                     {
                         path: "/login",
                         element: <LoginPage />,
@@ -30,9 +30,8 @@ export const router = createBrowserRouter([
                         path: "/register",
                         element: <RegisterPage />,
                     },
-                ]
+                ],
             },
-
             {
                 element: <AuthRoute />,
                 children: [
@@ -49,8 +48,12 @@ export const router = createBrowserRouter([
                         element: <HistoryPage />,
                     },
                     {
-                        path: "/analysis/:id",
+                        path: "analysis/:id",
                         element: <AnalysisDetailsPage />,
+                    },
+                    {
+                        path: "analysis/:id/log-trade",
+                        element: <TradeLogPage />,
                     },
                 ],
             },

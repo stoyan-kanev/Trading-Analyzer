@@ -1,33 +1,85 @@
 import { useNavigate, useParams } from "react-router-dom";
-import "./AnalysisPage.css";
 import { useEffect, useState } from "react";
+
+import "./AnalysisDetailPage.css";
+
 import { AnalysisService } from "../../services/analysisService.ts";
-import type {AnalysisResponse} from "../../types/analysisTypes.ts";
-import {formatDate} from "../../helpers/formatDate.tsx";
-import {formatSession} from "../../helpers/formatSession.tsx";
+import { TradeService } from "../../services/tradeServices.ts";
 
+import type { AnalysisResponse } from "../../types/analysisTypes.ts";
+import type { TradeResponse } from "../../types/tradeTypes.ts";
 
+import { formatDate } from "../../helpers/formatDate.tsx";
+import { formatSession } from "../../helpers/formatSession.tsx";
 
 export function AnalysisDetailsPage() {
     const { id } = useParams();
     const navigate = useNavigate();
 
     const [analysis, setAnalysis] = useState<AnalysisResponse | null>(null);
+    const [trade, setTrade] = useState<TradeResponse | null>(null);
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     useEffect(() => {
-        const getAnalysis = async () => {
-            try {
-                if (!id) return;
+        const fetchAnalysisDetails = async () => {
+            if (!id) {
+                setErrorMessage("Missing analysis id.");
+                setIsLoading(false);
+                return;
+            }
 
-                const result = await AnalysisService.getAnalysisById(id);
-                setAnalysis(result.data);
-            } catch (error) {
-                console.error(error);
+            try {
+                setIsLoading(true);
+                setErrorMessage(null);
+
+                const analysisResult = await AnalysisService.getAnalysisById(id);
+                setAnalysis(analysisResult.data);
+
+                try {
+                    const tradeResult = await TradeService.getTradeByAnalysisId(id);
+                    setTrade(tradeResult.data);
+                } catch (tradeError) {
+                    console.log(tradeError);
+                    setTrade(null);
+                }
+            } catch (err) {
+                console.log(err);
+                setErrorMessage("Failed to load analysis details.");
+            } finally {
+                setIsLoading(false);
             }
         };
 
-        getAnalysis();
+        fetchAnalysisDetails();
     }, [id]);
+
+    if (isLoading) {
+        return (
+            <main className="analysis-details-page">
+                <section className="details-empty-state">
+                    <h1>Loading...</h1>
+                    <p>Loading analysis details.</p>
+                </section>
+            </main>
+        );
+    }
+
+    if (errorMessage) {
+        return (
+            <main className="analysis-details-page">
+                <section className="details-empty-state">
+                    <h1>Error</h1>
+                    <p>{errorMessage}</p>
+
+                    <button onClick={() => navigate("/history")}>
+                        Back to History
+                    </button>
+                </section>
+            </main>
+        );
+    }
 
     if (!analysis) {
         return (
@@ -57,17 +109,30 @@ export function AnalysisDetailsPage() {
                     <div>
                         <h1>{analysis.pair}</h1>
                         <p>
-                            {formatDate(analysis.created_at)} • {formatSession(analysis.session)} Session
+                            {formatDate(analysis.created_at)} •{" "}
+                            {formatSession(analysis.session)} Session
                         </p>
                     </div>
 
-                    <span
-                        className={`details-decision decision-${analysis.decision
-                            .toLowerCase()
-                            .replace(" ", "-")}`}
-                    >
-                        {analysis.decision.toUpperCase()}
-                    </span>
+                    <div className="analysis-decision-and-btn">
+                        <span
+                            className={`details-decision decision-${analysis.decision
+                                .toLowerCase()
+                                .replace("_", "-")
+                                .replace(" ", "-")}`}
+                        >
+                            {analysis.decision.toUpperCase()}
+                        </span>
+
+                        {!trade && (
+                            <button
+                                className="dashboard-primary-btn"
+                                onClick={() => navigate(`/analysis/${analysis.id}/log-trade`)}
+                            >
+                                Log Trade
+                            </button>
+                        )}
+                    </div>
                 </div>
             </section>
 
@@ -120,6 +185,61 @@ export function AnalysisDetailsPage() {
                     <div className="details-section">
                         <h2>Notes</h2>
                         <p>{analysis.notes || "No notes added."}</p>
+                    </div>
+
+                    <div className="details-section trade-journal-section">
+                        <div className="trade-journal-header">
+                            <h2>Linked Trade</h2>
+
+                            {!trade && (
+                                <button
+                                    className="dashboard-primary-btn"
+                                    onClick={() => navigate(`/analysis/${analysis.id}/log-trade`)}
+                                >
+                                    Log Trade
+                                </button>
+                            )}
+                        </div>
+
+                        {trade ? (
+                            <div className="trade-details-grid">
+                                <div className="details-info-item">
+                                    <span>Entry Price</span>
+                                    <strong>{trade.entry_price}</strong>
+                                </div>
+
+                                <div className="details-info-item">
+                                    <span>Stop Loss</span>
+                                    <strong>{trade.stop_loss}</strong>
+                                </div>
+
+                                <div className="details-info-item">
+                                    <span>Take Profit</span>
+                                    <strong>{trade.take_profit}</strong>
+                                </div>
+
+                                <div className="details-info-item">
+                                    <span>Result</span>
+                                    <strong className={`trade-result trade-result-${trade.result}`}>
+                                        {trade.result.toUpperCase()}
+                                    </strong>
+                                </div>
+
+                                <div className="details-info-item">
+                                    <span>Profit / Loss</span>
+                                    <strong>{trade.profit_loss_r}R</strong>
+                                </div>
+
+                                <div className="details-info-item trade-notes-item">
+                                    <span>Trade Notes</span>
+                                    <strong>{trade.notes || "No trade notes added."}</strong>
+                                </div>
+                            </div>
+                        ) : (
+                            <p className="muted-text">
+                                No trade has been logged for this analysis yet.
+                            </p>
+                        )}
                     </div>
                 </div>
 
